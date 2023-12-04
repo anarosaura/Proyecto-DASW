@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Contacto</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background-color: #0a49a8;
+            /* Color de la barra azul */
+            padding: 10px;
+            /* Ajusta según sea necesario */
+            text-align: center;
+        }
+
+        .logo img {
+            height: 100px;
+            /* Agrega cualquier estilo adicional necesario para el logo */
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="./images/logo2.png" alt="Logo de empresa" height="100">
+        </div>
+    </header>
+
+    <div class="container mt-5">
+        <h1>
+            Contacto
+        </h1>
+
+        <form id="formularioContacto" method="post">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Correo Electrónico:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Cuéntanos más sobre ti:</label>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" id="doctor" name="rol" value="doctor" required>
+                    <label class="form-check-label" for="doctor">Soy un Doctor</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" id="paciente" name="rol" value="paciente" required>
+                    <label class="form-check-label" for="paciente">Soy un Paciente</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" id="distribuidor" name="rol" value="distribuidor"
+                        required>
+                    <label class="form-check-label" for="distribuidor">Soy un Distribuidor</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="mensaje">Mensaje:</label>
+                <textarea class="form-control" id="mensaje" name="mensaje" rows="4" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <ul class="nav mt-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Regresar a la Página Principal</a>
+                </li>
+            </ul>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        emailjs.init("JkiNCiTUmKy6KnUza"); // Reemplaza con tu User ID de Email.js
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var formulario = document.getElementById('formularioContacto');
+            console.log("Kheee", formulario.nombre);
+            formulario.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                // Validar el formulario antes de enviar
+                if (validarFormulario()) {
+                    // Obtener los datos del formulario
+                    var formData = new FormData(this);
+                    var emailData = {
+                        nombre: formData.get("nombre"),
+                        email: formData.get("email"),
+                        rol: formData.get("rol"),
+                        mensaje: formData.get("mensaje")
+                    };
+
+                    // Enviar los datos del formulario a través de Email.js
+                    emailjs.send("service_vxgzlgq", "template_3h43ri8", emailData)
+                        .then(function (response) {
+                            mostrarMensaje('Correo enviado correctamente.', 'success');
+
+                            console.log('Correo enviado con éxito', response);
+                            formulario.reset();
+
+                        }, function (error) {
+                            mostrarMensaje('Error al enviar el correo. Inténtalo de nuevo más tarde.', 'danger');
+                            console.error('Error al enviar el correo', error);
+                        });
+                }
+            });
+
+            function validarFormulario() {
+                return true;
+            }
+            function mostrarMensaje(mensaje, tipo) {
+                var alerta = document.createElement('div');
+                alerta.className = 'alert alert-' + tipo;
+                alerta.textContent = mensaje;
+
+                // Insertar la alerta antes del formulario
+                formulario.parentNode.insertBefore(alerta, formulario);
+
+                // Ocultar la alerta después de unos segundos (puedes ajustar el tiempo según tus necesidades)
+                setTimeout(function () {
+                    alerta.style.display = 'none';
+                }, 3000);
+            }
+        });
+
+    </script>
+</body>
+
+</html>
